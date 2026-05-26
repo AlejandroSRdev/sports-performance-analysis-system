@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
 from src.presentation.routes import health
+from src.presentation.routes import player_context_routes
 
 app = FastAPI(
     title="Sports Performance Analysis System",
@@ -8,3 +9,4 @@ app = FastAPI(
 )
 
 app.include_router(health.router)
+app.include_router(player_context_routes.router)

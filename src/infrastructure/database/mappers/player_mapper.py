@@ -9,6 +9,7 @@ def to_domain(model: PlayerModel) -> Player:
         active=model.active,
         created_at=model.created_at,
         updated_at=model.updated_at,
+        operational_identity_key=model.operational_identity_key,
         team=model.team,
         jersey_number=model.jersey_number,
     )
@@ -21,6 +22,7 @@ def to_model(entity: Player) -> PlayerModel:
     model.active = entity.active
     model.created_at = entity.created_at
     model.updated_at = entity.updated_at
+    model.operational_identity_key = entity.operational_identity_key
     model.team = entity.team
     model.jersey_number = entity.jersey_number
     return model

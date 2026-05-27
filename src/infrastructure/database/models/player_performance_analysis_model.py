@@ -23,7 +23,6 @@ class PlayerPerformanceAnalysisModel(Base):
     discipline_trend: Mapped[str | None] = mapped_column(String(20), nullable=True)
     contact_trend: Mapped[str | None] = mapped_column(String(20), nullable=True)
     fielding_trend: Mapped[str | None] = mapped_column(String(20), nullable=True)
-    pitching_trend: Mapped[str | None] = mapped_column(String(20), nullable=True)
     overall_trend: Mapped[str | None] = mapped_column(String(20), nullable=True)
 
     priority_area: Mapped[str | None] = mapped_column(String(100), nullable=True)

@@ -226,4 +226,4 @@ The objective is not to demonstrate AI usage.
 
 The objective is:
 
-> transforming real sports data into operationally useful analytical workflows through reliable backend engineering.
+ Transforming real sports data into operationally useful analytical workflows through reliable backend engineering.

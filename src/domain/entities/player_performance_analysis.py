@@ -18,7 +18,6 @@ class PlayerPerformanceAnalysis:
     discipline_trend: str | None = field(default=None)
     contact_trend: str | None = field(default=None)
     fielding_trend: str | None = field(default=None)
-    pitching_trend: str | None = field(default=None)
     overall_trend: str | None = field(default=None)
 
     priority_area: str | None = field(default=None)
@@ -36,7 +35,7 @@ class PlayerPerformanceAnalysis:
 
         _TREND_FIELDS = (
             "batting_trend", "discipline_trend", "contact_trend",
-            "fielding_trend", "pitching_trend", "overall_trend",
+            "fielding_trend", "overall_trend",
         )
         for field_name in _TREND_FIELDS:
             value = getattr(self, field_name)

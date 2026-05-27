@@ -27,46 +27,37 @@ class PlayerStatisticsSnapshotModel(Base):
     games_played: Mapped[int | None] = mapped_column(Integer, nullable=True)
     at_bats: Mapped[int | None] = mapped_column(Integer, nullable=True)
 
-    # Batting
-    batting_average: Mapped[Decimal | None] = mapped_column(Numeric(5, 3), nullable=True)
-    on_base_percentage: Mapped[Decimal | None] = mapped_column(Numeric(5, 3), nullable=True)
-    slugging_percentage: Mapped[Decimal | None] = mapped_column(Numeric(5, 3), nullable=True)
-    ops: Mapped[Decimal | None] = mapped_column(Numeric(5, 3), nullable=True)
+    # Batting counts
     runs: Mapped[int | None] = mapped_column(Integer, nullable=True)
     hits: Mapped[int | None] = mapped_column(Integer, nullable=True)
     doubles: Mapped[int | None] = mapped_column(Integer, nullable=True)
     triples: Mapped[int | None] = mapped_column(Integer, nullable=True)
     home_runs: Mapped[int | None] = mapped_column(Integer, nullable=True)
     runs_batted_in: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    total_bases: Mapped[int | None] = mapped_column(Integer, nullable=True)
     walks: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    hit_by_pitch: Mapped[int | None] = mapped_column(Integer, nullable=True)
     strikeouts: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    grounded_into_double_play: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    sacrifice_flies: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    sacrifice_hits: Mapped[int | None] = mapped_column(Integer, nullable=True)
     stolen_bases: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    caught_stealing: Mapped[int | None] = mapped_column(Integer, nullable=True)
+
+    # Batting rates
+    batting_average: Mapped[Decimal | None] = mapped_column(Numeric(5, 3), nullable=True)
+    on_base_percentage: Mapped[Decimal | None] = mapped_column(Numeric(5, 3), nullable=True)
+    slugging_percentage: Mapped[Decimal | None] = mapped_column(Numeric(5, 3), nullable=True)
 
     # Fielding
-    fielding_percentage: Mapped[Decimal | None] = mapped_column(Numeric(5, 3), nullable=True)
     putouts: Mapped[int | None] = mapped_column(Integer, nullable=True)
     assists: Mapped[int | None] = mapped_column(Integer, nullable=True)
     errors: Mapped[int | None] = mapped_column(Integer, nullable=True)
-
-    # Pitching
-    earned_run_average: Mapped[Decimal | None] = mapped_column(Numeric(5, 2), nullable=True)
-    innings_pitched: Mapped[Decimal | None] = mapped_column(Numeric(6, 1), nullable=True)
-    wins: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    losses: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    earned_runs: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    pitching_strikeouts: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    walks_allowed: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    hits_allowed: Mapped[int | None] = mapped_column(Integer, nullable=True)
-
-    # Per-game averages
-    hits_per_game: Mapped[Decimal | None] = mapped_column(Numeric(5, 3), nullable=True)
-    runs_per_game: Mapped[Decimal | None] = mapped_column(Numeric(5, 3), nullable=True)
-    rbi_per_game: Mapped[Decimal | None] = mapped_column(Numeric(5, 3), nullable=True)
-    strikeouts_per_game: Mapped[Decimal | None] = mapped_column(Numeric(5, 3), nullable=True)
-    walks_per_game: Mapped[Decimal | None] = mapped_column(Numeric(5, 3), nullable=True)
+    fielding_percentage: Mapped[Decimal | None] = mapped_column(Numeric(5, 3), nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
+    imported_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
     player = relationship("PlayerModel", back_populates="statistics_snapshots")

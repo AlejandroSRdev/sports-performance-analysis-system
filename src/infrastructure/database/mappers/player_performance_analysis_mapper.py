@@ -13,7 +13,6 @@ def to_domain(model: PlayerPerformanceAnalysisModel) -> PlayerPerformanceAnalysi
         discipline_trend=model.discipline_trend,
         contact_trend=model.contact_trend,
         fielding_trend=model.fielding_trend,
-        pitching_trend=model.pitching_trend,
         overall_trend=model.overall_trend,
         priority_area=model.priority_area,
         consistency_score=model.consistency_score,
@@ -31,7 +30,6 @@ def to_model(entity: PlayerPerformanceAnalysis) -> PlayerPerformanceAnalysisMode
     model.discipline_trend = entity.discipline_trend
     model.contact_trend = entity.contact_trend
     model.fielding_trend = entity.fielding_trend
-    model.pitching_trend = entity.pitching_trend
     model.overall_trend = entity.overall_trend
     model.priority_area = entity.priority_area
     model.consistency_score = entity.consistency_score

@@ -6,7 +6,7 @@ from uuid import UUID
 
 @dataclass(slots=True, frozen=True)
 class PlayerStatisticsSnapshot:
-    """Immutable historical statistical truth for a player at a given point in time."""
+    """Immutable aggregated statistical state extracted from the federative Overall Statistics table."""
 
     id: UUID
     player_id: UUID
@@ -17,52 +17,43 @@ class PlayerStatisticsSnapshot:
     games_played: int | None = field(default=None)
     at_bats: int | None = field(default=None)
 
-    # Batting
-    batting_average: Decimal | None = field(default=None)
-    on_base_percentage: Decimal | None = field(default=None)
-    slugging_percentage: Decimal | None = field(default=None)
-    ops: Decimal | None = field(default=None)
+    # Batting counts
     runs: int | None = field(default=None)
     hits: int | None = field(default=None)
     doubles: int | None = field(default=None)
     triples: int | None = field(default=None)
     home_runs: int | None = field(default=None)
     runs_batted_in: int | None = field(default=None)
+    total_bases: int | None = field(default=None)
     walks: int | None = field(default=None)
+    hit_by_pitch: int | None = field(default=None)
     strikeouts: int | None = field(default=None)
+    grounded_into_double_play: int | None = field(default=None)
+    sacrifice_flies: int | None = field(default=None)
+    sacrifice_hits: int | None = field(default=None)
     stolen_bases: int | None = field(default=None)
+    caught_stealing: int | None = field(default=None)
+
+    # Batting rates
+    batting_average: Decimal | None = field(default=None)
+    on_base_percentage: Decimal | None = field(default=None)
+    slugging_percentage: Decimal | None = field(default=None)
 
     # Fielding
-    fielding_percentage: Decimal | None = field(default=None)
     putouts: int | None = field(default=None)
     assists: int | None = field(default=None)
     errors: int | None = field(default=None)
+    fielding_percentage: Decimal | None = field(default=None)
 
-    # Pitching
-    earned_run_average: Decimal | None = field(default=None)
-    innings_pitched: Decimal | None = field(default=None)
-    wins: int | None = field(default=None)
-    losses: int | None = field(default=None)
-    earned_runs: int | None = field(default=None)
-    pitching_strikeouts: int | None = field(default=None)
-    walks_allowed: int | None = field(default=None)
-    hits_allowed: int | None = field(default=None)
-
-    # Per-game averages
-    hits_per_game: Decimal | None = field(default=None)
-    runs_per_game: Decimal | None = field(default=None)
-    rbi_per_game: Decimal | None = field(default=None)
-    strikeouts_per_game: Decimal | None = field(default=None)
-    walks_per_game: Decimal | None = field(default=None)
-
+    imported_at: datetime | None = field(default=None)
     source_url: str | None = field(default=None)
 
     def __post_init__(self) -> None:
         _INT_FIELDS = (
             "games_played", "at_bats", "runs", "hits", "doubles", "triples",
-            "home_runs", "runs_batted_in", "walks", "strikeouts", "stolen_bases",
-            "putouts", "assists", "errors", "wins", "losses", "earned_runs",
-            "pitching_strikeouts", "walks_allowed", "hits_allowed",
+            "home_runs", "runs_batted_in", "total_bases", "walks", "hit_by_pitch",
+            "strikeouts", "grounded_into_double_play", "sacrifice_flies", "sacrifice_hits",
+            "stolen_bases", "caught_stealing", "putouts", "assists", "errors",
         )
         for field_name in _INT_FIELDS:
             value = getattr(self, field_name)
@@ -70,10 +61,8 @@ class PlayerStatisticsSnapshot:
                 raise ValueError(f"{field_name} must be >= 0.")
 
         _DECIMAL_FIELDS = (
-            "batting_average", "on_base_percentage", "slugging_percentage", "ops",
-            "fielding_percentage", "earned_run_average", "innings_pitched",
-            "hits_per_game", "runs_per_game", "rbi_per_game",
-            "strikeouts_per_game", "walks_per_game",
+            "batting_average", "on_base_percentage", "slugging_percentage",
+            "fielding_percentage",
         )
         for field_name in _DECIMAL_FIELDS:
             value = getattr(self, field_name)

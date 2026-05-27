@@ -12,6 +12,7 @@ class Player:
     active: bool
     created_at: datetime
     updated_at: datetime
+    operational_identity_key: str
     team: str | None = field(default=None)
     jersey_number: int | None = field(default=None)
 
@@ -20,3 +21,5 @@ class Player:
             raise ValueError("Player name must not be empty or whitespace-only.")
         if self.jersey_number is not None and self.jersey_number < 0:
             raise ValueError("Player jersey_number must be >= 0.")
+        if not self.operational_identity_key or not self.operational_identity_key.strip():
+            raise ValueError("Player operational_identity_key must not be empty.")

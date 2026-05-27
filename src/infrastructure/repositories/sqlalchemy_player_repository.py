@@ -27,6 +27,15 @@ class SQLAlchemyPlayerRepository:
             "federation_player_id is not stored in the current schema."
         )
 
+    def find_by_operational_identity_key(self, operational_identity_key: str) -> Player | None:
+        stmt = select(PlayerModel).where(
+            PlayerModel.operational_identity_key == operational_identity_key
+        )
+        model = self._session.execute(stmt).scalar_one_or_none()
+        if model is None:
+            return None
+        return player_mapper.to_domain(model)
+
     def list_all(self) -> list[Player]:
         stmt = select(PlayerModel).order_by(PlayerModel.created_at.asc())
         models = self._session.execute(stmt).scalars().all()

@@ -15,8 +15,10 @@ from src.presentation.dependencies.db import get_db
 from src.presentation.dependencies.use_cases import get_import_federation_stats_use_case
 from src.presentation.schemas.import_federation_stats_request import ImportFederationStatsRequestSchema
 from src.presentation.schemas.import_federation_stats_response import ImportFederationStatsResponseSchema
+from src.shared.logging import get_logger
 
 router = APIRouter(tags=["imports"])
+_logger = get_logger("import_routes")
 
 
 @router.post(
@@ -47,11 +49,15 @@ def import_federation_stats(
             source_url=result.source_url,
             imported_at=result.imported_at,
         )
-    except InvalidSourceUrlError:
+    except InvalidSourceUrlError as exc:
+        _logger.error("invalid_source_url", detail=str(exc))
         return JSONResponse(status_code=400, content={"error": "INVALID_SOURCE_URL"})
-    except HtmlFetchFailedError:
+    except HtmlFetchFailedError as exc:
+        _logger.error("html_fetch_failed", detail=str(exc))
         return JSONResponse(status_code=502, content={"error": "HTML_FETCH_FAILED"})
-    except TableStructureNotSupportedError:
+    except TableStructureNotSupportedError as exc:
+        _logger.error("table_structure_not_supported", detail=str(exc))
         return JSONResponse(status_code=422, content={"error": "TABLE_STRUCTURE_NOT_SUPPORTED"})
-    except ImportFederationStatsError:
+    except ImportFederationStatsError as exc:
+        _logger.error("import_failed", detail=str(exc))
         return JSONResponse(status_code=500, content={"error": "IMPORT_FAILED"})

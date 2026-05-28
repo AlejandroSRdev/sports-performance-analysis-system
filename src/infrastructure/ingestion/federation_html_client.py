@@ -6,7 +6,11 @@ class FederationHtmlClient:
 
     def fetch(self, source_url: str) -> str:
         try:
-            response = requests.get(source_url, timeout=15)
+            response = requests.get(
+                source_url,
+                headers={"User-Agent": "Mozilla/5.0"},
+                timeout=15,
+            )
             response.raise_for_status()
             return response.text
         except requests.RequestException as exc:

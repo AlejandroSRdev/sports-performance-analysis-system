@@ -5,6 +5,9 @@ from src.infrastructure.repositories.sqlalchemy_coach_context_note_repository im
     SQLAlchemyCoachContextNoteRepository,
 )
 from src.infrastructure.repositories.sqlalchemy_player_repository import SQLAlchemyPlayerRepository
+from src.infrastructure.repositories.sqlalchemy_player_statistics_snapshot_repository import (
+    SQLAlchemyPlayerStatisticsSnapshotRepository,
+)
 from src.presentation.dependencies.db import get_db
 
 
@@ -16,3 +19,9 @@ def get_coach_context_note_repository(
     db: Session = Depends(get_db),
 ) -> SQLAlchemyCoachContextNoteRepository:
     return SQLAlchemyCoachContextNoteRepository(db)
+
+
+def get_player_statistics_snapshot_repository(
+    db: Session = Depends(get_db),
+) -> SQLAlchemyPlayerStatisticsSnapshotRepository:
+    return SQLAlchemyPlayerStatisticsSnapshotRepository(db)

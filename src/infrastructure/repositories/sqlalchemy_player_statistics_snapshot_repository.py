@@ -1,6 +1,7 @@
 from datetime import date
 from uuid import UUID
 
+from sqlalchemy import exists as sa_exists
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -54,3 +55,10 @@ class SQLAlchemyPlayerStatisticsSnapshotRepository:
         if model is None:
             return None
         return player_statistics_snapshot_mapper.to_domain(model)
+
+    def exists_for_player_and_snapshot_date(self, player_id: UUID, snapshot_date: date) -> bool:
+        stmt = select(sa_exists().where(
+            PlayerStatisticsSnapshotModel.player_id == player_id,
+            PlayerStatisticsSnapshotModel.snapshot_date == snapshot_date,
+        ))
+        return bool(self._session.execute(stmt).scalar())

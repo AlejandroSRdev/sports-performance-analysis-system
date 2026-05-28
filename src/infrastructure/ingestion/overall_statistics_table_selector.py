@@ -1,11 +1,15 @@
 import pandas as pd
 from src.infrastructure.ingestion.exceptions import TableStructureNotSupportedError
 
-# Minimum required columns (lowercase) to identify the Overall Statistics table.
+# Required columns (lowercase) that must all be present to identify the Overall Statistics table.
 _REQUIRED_COLUMNS = {"ab", "h", "avg", "rbi", "fld%"}
 
 # Accepted player name column labels (lowercase).
 _PLAYER_NAME_COLUMNS = {"player", "jugador", "nombre", "name"}
+
+
+def _normalize_header(value: object) -> str:
+    return str(value).lower().strip()
 
 
 class OverallStatisticsTableSelector:
@@ -19,10 +23,17 @@ class OverallStatisticsTableSelector:
             ) from exc
 
         for table in tables:
-            normalized = {col.lower().strip() for col in table.columns}
-            if _REQUIRED_COLUMNS.issubset(normalized) and bool(normalized & _PLAYER_NAME_COLUMNS):
-                table.columns = [col.lower().strip() for col in table.columns]
-                return table
+            if table.empty or len(table) < 2:
+                continue
+
+            candidate_headers = [_normalize_header(v) for v in table.iloc[0]]
+            header_set = set(candidate_headers)
+
+            if _REQUIRED_COLUMNS.issubset(header_set) and bool(header_set & _PLAYER_NAME_COLUMNS):
+                normalized_df = table.copy()
+                normalized_df.columns = candidate_headers
+                normalized_df = normalized_df.iloc[1:].reset_index(drop=True)
+                return normalized_df
 
         raise TableStructureNotSupportedError(
             "No table matching the Overall Statistics column signature was found."

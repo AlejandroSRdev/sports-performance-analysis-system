@@ -34,15 +34,9 @@ class PlayerStatisticsSnapshotModel(Base):
     triples: Mapped[int | None] = mapped_column(Integer, nullable=True)
     home_runs: Mapped[int | None] = mapped_column(Integer, nullable=True)
     runs_batted_in: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    total_bases: Mapped[int | None] = mapped_column(Integer, nullable=True)
     walks: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    hit_by_pitch: Mapped[int | None] = mapped_column(Integer, nullable=True)
     strikeouts: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    grounded_into_double_play: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    sacrifice_flies: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    sacrifice_hits: Mapped[int | None] = mapped_column(Integer, nullable=True)
     stolen_bases: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    caught_stealing: Mapped[int | None] = mapped_column(Integer, nullable=True)
 
     # Batting rates
     batting_average: Mapped[Decimal | None] = mapped_column(Numeric(5, 3), nullable=True)
@@ -58,6 +52,5 @@ class PlayerStatisticsSnapshotModel(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
-    imported_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
     player = relationship("PlayerModel", back_populates="statistics_snapshots")

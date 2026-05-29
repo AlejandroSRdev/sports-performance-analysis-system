@@ -24,15 +24,9 @@ class PlayerStatisticsSnapshot:
     triples: int | None = field(default=None)
     home_runs: int | None = field(default=None)
     runs_batted_in: int | None = field(default=None)
-    total_bases: int | None = field(default=None)
     walks: int | None = field(default=None)
-    hit_by_pitch: int | None = field(default=None)
     strikeouts: int | None = field(default=None)
-    grounded_into_double_play: int | None = field(default=None)
-    sacrifice_flies: int | None = field(default=None)
-    sacrifice_hits: int | None = field(default=None)
     stolen_bases: int | None = field(default=None)
-    caught_stealing: int | None = field(default=None)
 
     # Batting rates
     batting_average: Decimal | None = field(default=None)
@@ -45,15 +39,13 @@ class PlayerStatisticsSnapshot:
     errors: int | None = field(default=None)
     fielding_percentage: Decimal | None = field(default=None)
 
-    imported_at: datetime | None = field(default=None)
     source_url: str | None = field(default=None)
 
     def __post_init__(self) -> None:
         _INT_FIELDS = (
             "games_played", "at_bats", "runs", "hits", "doubles", "triples",
-            "home_runs", "runs_batted_in", "total_bases", "walks", "hit_by_pitch",
-            "strikeouts", "grounded_into_double_play", "sacrifice_flies", "sacrifice_hits",
-            "stolen_bases", "caught_stealing", "putouts", "assists", "errors",
+            "home_runs", "runs_batted_in", "walks", "strikeouts",
+            "stolen_bases", "putouts", "assists", "errors",
         )
         for field_name in _INT_FIELDS:
             value = getattr(self, field_name)

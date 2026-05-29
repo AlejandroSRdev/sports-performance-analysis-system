@@ -17,10 +17,8 @@ class OperationalIdentityBuilder:
         cls,
         *,
         name: str,
-        jersey_number: int | None,
         team: str | None,
     ) -> str:
         normalized_name = cls.normalize_text(name)
-        jersey_part = str(jersey_number) if jersey_number is not None else "unknown"
         team_part = cls.normalize_text(team) if team is not None else "unknown"
-        return f"{normalized_name}:{jersey_part}:{team_part}"
+        return f"{normalized_name}:{team_part}"

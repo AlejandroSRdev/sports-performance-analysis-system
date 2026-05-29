@@ -15,6 +15,8 @@ from src.infrastructure.ingestion.federation_stats_row_mapper import FederationS
 from src.infrastructure.ingestion.overall_statistics_table_selector import OverallStatisticsTableSelector
 from src.shared.logging import StructuredLogger
 
+_FCBS_DEFAULT_TEAM = "Panteres Vallès"
+
 
 class ImportFederationStatsUseCase:
 
@@ -59,10 +61,10 @@ class ImportFederationStatsUseCase:
             try:
                 row_dto: FederationPlayerStatsRowDTO = self._row_mapper.map_row(row_dict)
 
+                effective_team = row_dto.team or _FCBS_DEFAULT_TEAM
                 identity_key = OperationalIdentityBuilder.build(
                     name=row_dto.player_name,
-                    jersey_number=row_dto.jersey_number,
-                    team=row_dto.team,
+                    team=effective_team,
                 )
 
                 player = self._player_repository.find_by_operational_identity_key(identity_key)
@@ -76,7 +78,7 @@ class ImportFederationStatsUseCase:
                         created_at=now,
                         updated_at=now,
                         operational_identity_key=identity_key,
-                        team=row_dto.team,
+                        team=effective_team,
                         jersey_number=row_dto.jersey_number,
                     )
                     self._player_repository.save(player)

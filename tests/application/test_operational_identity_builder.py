@@ -27,22 +27,14 @@ class TestNormalizeText:
 class TestBuild:
 
     def test_deterministic_key_generation(self) -> None:
-        key1 = OperationalIdentityBuilder.build(name="Alejandro Sáavedra", jersey_number=17, team="CB Vallès")
-        key2 = OperationalIdentityBuilder.build(name="Alejandro Sáavedra", jersey_number=17, team="CB Vallès")
+        key1 = OperationalIdentityBuilder.build(name="Alejandro Sáavedra", team="CB Vallès")
+        key2 = OperationalIdentityBuilder.build(name="Alejandro Sáavedra", team="CB Vallès")
         assert key1 == key2
 
     def test_full_key_format(self) -> None:
-        key = OperationalIdentityBuilder.build(name="Alejandro Sáavedra", jersey_number=17, team="CB Vallès")
-        assert key == "alejandro_saavedra:17:cb_valles"
-
-    def test_missing_jersey_fallback(self) -> None:
-        key = OperationalIdentityBuilder.build(name="Pedro Garcia", jersey_number=None, team="CB Vallès")
-        assert key == "pedro_garcia:unknown:cb_valles"
+        key = OperationalIdentityBuilder.build(name="Alejandro Sáavedra", team="CB Vallès")
+        assert key == "alejandro_saavedra:cb_valles"
 
     def test_missing_team_fallback(self) -> None:
-        key = OperationalIdentityBuilder.build(name="Pedro Garcia", jersey_number=7, team=None)
-        assert key == "pedro_garcia:7:unknown"
-
-    def test_missing_both_fallbacks(self) -> None:
-        key = OperationalIdentityBuilder.build(name="Pedro Garcia", jersey_number=None, team=None)
-        assert key == "pedro_garcia:unknown:unknown"
+        key = OperationalIdentityBuilder.build(name="Pedro Garcia", team=None)
+        assert key == "pedro_garcia:unknown"

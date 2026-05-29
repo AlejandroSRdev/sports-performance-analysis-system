@@ -6,6 +6,7 @@ from src.infrastructure.ingestion.exceptions import FederationRowMappingError
 _PLAYER_NAME_COLUMNS = ["player", "jugador", "nombre", "name"]
 _TEAM_COLUMNS = ["team", "equipo", "club"]
 _JERSEY_COLUMNS = ["#", "jersey", "dorsal", "num"]
+_AGGREGATE_ROW_NAMES = frozenset({"totals", "total", "opponents", "oponentes"})
 
 
 def _to_int(value: object) -> int | None:
@@ -83,8 +84,11 @@ class FederationStatsRowMapper:
         player_name = self._extract_player_name(row)
         if player_name is None:
             raise FederationRowMappingError("Row has no parseable player name.")
-        if "total" in player_name.lower().strip():
-            raise FederationRowMappingError(f"Row is a total aggregate row: {player_name}")
+        if not any(c.isalpha() for c in player_name):
+            raise FederationRowMappingError(f"Row is a decorative separator row: {player_name}")
+        normalized_name = player_name.lower().strip()
+        if normalized_name in _AGGREGATE_ROW_NAMES or "total" in normalized_name:
+            raise FederationRowMappingError(f"Row is an aggregate row: {player_name}")
 
         team = self._extract_first(row, _TEAM_COLUMNS)
         jersey_number = self._extract_jersey(row)

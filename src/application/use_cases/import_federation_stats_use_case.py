@@ -90,6 +90,15 @@ class ImportFederationStatsUseCase:
                     )
                     created_players += 1
                 else:
+                    if player.team is None:
+                        player.team = effective_team
+                        player.updated_at = datetime.now(tz=timezone.utc)
+                        self._player_repository.save(player)
+                        self._logger.info(
+                            "player_team_updated",
+                            player_id=str(player.id),
+                            identity_key=identity_key,
+                        )
                     self._logger.info(
                         "player_reused",
                         player_id=str(player.id),
@@ -113,7 +122,6 @@ class ImportFederationStatsUseCase:
                     player_id=player.id,
                     snapshot_date=dto.snapshot_date,
                     created_at=datetime.now(tz=timezone.utc),
-                    imported_at=imported_at,
                     source_url=dto.source_url,
                     games_played=row_dto.games_played,
                     at_bats=row_dto.at_bats,
@@ -123,15 +131,9 @@ class ImportFederationStatsUseCase:
                     triples=row_dto.triples,
                     home_runs=row_dto.home_runs,
                     runs_batted_in=row_dto.runs_batted_in,
-                    total_bases=row_dto.total_bases,
                     walks=row_dto.walks,
-                    hit_by_pitch=row_dto.hit_by_pitch,
                     strikeouts=row_dto.strikeouts,
-                    grounded_into_double_play=row_dto.grounded_into_double_play,
-                    sacrifice_flies=row_dto.sacrifice_flies,
-                    sacrifice_hits=row_dto.sacrifice_hits,
                     stolen_bases=row_dto.stolen_bases,
-                    caught_stealing=row_dto.caught_stealing,
                     batting_average=row_dto.batting_average,
                     on_base_percentage=row_dto.on_base_percentage,
                     slugging_percentage=row_dto.slugging_percentage,
